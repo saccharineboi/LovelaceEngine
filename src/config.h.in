@@ -1,0 +1,5 @@
+#pragma once
+#define LOVELACE_ROOT_DIR        "@CMAKE_SOURCE_DIR@/"
+#define LOVELACE_VERSION_MAJOR   @LovelaceEngine_VERSION_MAJOR@
+#define LOVELACE_VERSION_MINOR   @LovelaceEngine_VERSION_MINOR@
+#cmakedefine                     DEBUG
