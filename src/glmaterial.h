@@ -61,7 +61,7 @@ namespace al::gl
                 virtual void update() override
                 {
                         using namespace std::string_literals;
-                        
+
                         assert(mPVM != nullptr);
                         mProgram.uniform("uPVM"s, *mPVM);
                 }

@@ -24,7 +24,7 @@ namespace al::gl
                 unsigned mId;
                 std::vector<shader*> mShaders;
                 std::unordered_map<std::string, int> mUniforms;
-                
+
                 void load();
                 void check();
                 int findUniform(const std::string& name);

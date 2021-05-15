@@ -9,7 +9,7 @@ namespace al::gl
         void APIENTRY debugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char *message, const void *userParam)
         {
                 // ignore non-significant error/warning codes
-                if(id == 1 || id == 131169 || id == 131185 || id == 131218 || id == 131204) return; 
+                if(id == 1 || id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
                 std::cerr << "\n= = = = = = = = = = Lovelace OpenGL Debug Message = = = = = = = = = =\n";
                 std::cerr << "Message (" << id << "): " <<  message << '\n';
@@ -29,7 +29,7 @@ namespace al::gl
                 {
                 case GL_DEBUG_TYPE_ERROR:               std::cerr << "Type: Error"; break;
                 case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: std::cerr << "Type: Deprecated Behaviour"; break;
-                case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  std::cerr << "Type: Undefined Behaviour"; break; 
+                case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  std::cerr << "Type: Undefined Behaviour"; break;
                 case GL_DEBUG_TYPE_PORTABILITY:         std::cerr << "Type: Portability"; break;
                 case GL_DEBUG_TYPE_PERFORMANCE:         std::cerr << "Type: Performance"; break;
                 case GL_DEBUG_TYPE_MARKER:              std::cerr << "Type: Marker"; break;

@@ -26,7 +26,7 @@ namespace al::gl::shader_loader
                                         throw exception("al::gl::shader_loader", "none", "load", "shader type unknown", etype::unexpected);
                         }(url);
                         auto r = shaders.emplace(url, std::move(shader(type, read(url))));
-                        log(std::cout, "[Lovelace] [al::gl::shader_loader] Loaded ", url); 
+                        log(std::cout, "[Lovelace] [al::gl::shader_loader] Loaded ", url);
                         return &r.first->second;
                 }
                 return &s->second;

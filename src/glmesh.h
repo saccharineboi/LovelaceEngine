@@ -44,7 +44,7 @@ namespace al::gl
                         bindTextures();
                         mVao.bind();
                         mVao.draw(mode);
-                        mVao.unbind(); 
+                        mVao.unbind();
                         unbindTextures();
                 }
         };

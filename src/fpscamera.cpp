@@ -106,7 +106,7 @@ namespace al
 
                 yaw += xoffset;
                 pitch += yoffset;
-                
+
                 if (pitch > mVerticalLimit)
                         pitch = mVerticalLimit;
                 else if (pitch < -mVerticalLimit)

@@ -53,7 +53,7 @@ namespace al::gl
                 mWrapT = other.mWrapT;
                 mMinF = other.mMinF;
                 mMagF = other.mMagF;
-                
+
                 mWidth = other.mWidth;
                 mHeight = other.mHeight;
                 mNumChannels = other.mNumChannels;
@@ -92,7 +92,7 @@ namespace al::gl
                 mWrapT = other.mWrapT;
                 mMinF = other.mMinF;
                 mMagF = other.mMagF;
-                
+
                 mData = other.mData;
                 mWidth = other.mWidth;
                 mHeight = other.mHeight;

@@ -42,7 +42,7 @@ namespace al
 
                 fpscamera_input mInput;
                 fpscamera_state mState;
-                
+
                 glm::vec3 mPosition             = glm::vec3(0.0f, 5.0f, 10.0f);
                 glm::vec3 mDirection            = glm::vec3(0.0f, 0.0f, -1.0f);
                 glm::vec3 mUp                   = glm::vec3(0.0f, 1.0f, 0.0f);

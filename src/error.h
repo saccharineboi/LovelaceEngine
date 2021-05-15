@@ -54,7 +54,7 @@ namespace al
                                         return "unknown\n";
                         }
                 }(mType);
-                
+
                 return s.c_str();
         }
 }
