@@ -24,33 +24,29 @@ namespace al::gl
         class vao
         {
                 unsigned mId;
-                unsigned mVboId;
-                unsigned mEboId;
-                size_t mNumElements;
+                buffer<VT> mVbo;
+                buffer<IT> mEbo;
 
                 std::vector<vao_info> mInfos;
 
                 void load();
         public:
-                vao(const buffer<VT>& vbo, const buffer<IT>& ebo, const std::vector<vao_info>& infos);
+                vao(buffer<VT>&& vbo, buffer<IT>&& ebo, const std::vector<vao_info>& infos);
 
                 ~vao()                          { glDeleteVertexArrays(1, &mId); }
 
-                vao(const vao&)                 = delete;
-                vao& operator=(const vao&)      = delete;
+                vao(const vao&);
+                vao& operator=(const vao&);
 
                 vao(vao&&);
                 vao& operator=(vao&&);
 
                 unsigned getId() const          { return mId; }
-                unsigned getVboId() const       { return mVboId; }
-                unsigned getEboId() const       { return mEboId; }
-                size_t getNumElements() const   { return mNumElements; }
 
                 void bind() const               { glBindVertexArray(mId); }
                 void unbind() const             { glBindVertexArray(0); }
 
-                void draw(int mode = GL_TRIANGLES) const { glDrawElements(mode, (GLsizei)mNumElements, utils::findEboType<IT>(), nullptr); }
+                void draw(int mode = GL_TRIANGLES) const { glDrawElements(mode, mEbo.getSize(), utils::findEboType<IT>(), nullptr); }
         };
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -59,29 +55,53 @@ namespace al::gl
         {
                 glGenVertexArrays(1, &mId);
                 glBindVertexArray(mId);
-                        glBindBuffer(GL_ARRAY_BUFFER, mVboId);
+                        mVbo.bind();
                         for (const vao_info& info : mInfos) {
                                 glVertexAttribPointer(info.index, info.size, info.type, info.normalized, info.stride, info.offset);
                                 glEnableVertexAttribArray(info.index);
                         }
-                        glBindBuffer(GL_ARRAY_BUFFER, 0);
-                        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEboId);
+                        mVbo.unbind();
+                        mEbo.bind();
                 glBindVertexArray(0);
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+                mEbo.unbind();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         template <typename VT, typename IT>
-        vao<VT, IT>::vao(const buffer<VT>& vbo, const buffer<IT>& ebo, const std::vector<vao_info>& infos)
-                : mVboId{vbo.getId()}, mEboId{ebo.getId()}, mNumElements{ebo.getSize()}, mInfos{infos}
+        vao<VT, IT>::vao(buffer<VT>&& vbo, buffer<IT>&& ebo, const std::vector<vao_info>& infos)
+                : mVbo{std::move(vbo)}, mEbo{std::move(ebo)}, mInfos{infos}
         {
                 load();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         template <typename VT, typename IT>
+        vao<VT, IT>::vao(const vao<VT, IT>& other)
+                : mVbo{other.mVbo}, mEbo{other.mEbo}, mInfos{other.mInfos}
+        {
+                load();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        template <typename VT, typename IT>
+        vao<VT, IT>& vao<VT, IT>::operator=(const vao<VT, IT>& other)
+        {
+                if (this != &other) {
+                        glDeleteVertexArrays(1, &mId);
+
+                        mVbo    = other.mVbo;
+                        mEbo    = other.mEbo;
+                        mInfos  = other.mInfos;
+
+                        load();
+                }
+                return *this;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        template <typename VT, typename IT>
         vao<VT, IT>::vao(vao<VT, IT>&& other)
-                : mId{other.mId}, mVboId{other.mVboId}, mEboId{other.mEboId}, mNumElements{other.mNumElements}, mInfos{std::move(other.mInfos)}
+                : mId{other.mId}, mVbo{std::move(other.mVbo)}, mEbo{std::move(other.mEbo)}, mInfos{std::move(other.mInfos)}
         {
                 other.mId = 0;
         }
@@ -94,9 +114,8 @@ namespace al::gl
                         glDeleteVertexArrays(1, &mId);
 
                         mId             = other.mId;
-                        mVboId          = other.mVboId;
-                        mEboId          = other.mEboId;
-                        mNumElements    = other.mNumElements;
+                        mVbo            = std::move(other.mVbo);
+                        mEbo            = std::move(other.mEbo);
                         mInfos          = std::move(other.mInfos);
 
                         other.mId       = 0;

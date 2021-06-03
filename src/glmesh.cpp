@@ -4,10 +4,10 @@ namespace al::gl
 {
         ////////////////////////////////////////////////////////////////////////////////
         mesh::mesh(std::vector<float>&& vertices, std::vector<unsigned>&& indices, const std::vector<vao_info>& infos)
-                : mVbo(GL_ARRAY_BUFFER, std::move(vertices), GL_STATIC_DRAW),
-                  mEbo(GL_ELEMENT_ARRAY_BUFFER, std::move(indices), GL_STATIC_DRAW),
-                  mInfos{(infos)},
-                  mVao(mVbo, mEbo, mInfos) {}
+                : mInfos{(infos)},
+                  mVao(std::move(buffer(GL_ARRAY_BUFFER, std::move(vertices), GL_STATIC_DRAW)),
+                       std::move(buffer(GL_ELEMENT_ARRAY_BUFFER, std::move(indices), GL_STATIC_DRAW)),
+                       mInfos) {}
 
         ////////////////////////////////////////////////////////////////////////////////
         mesh genTriangle()

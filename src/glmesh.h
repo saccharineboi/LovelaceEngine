@@ -13,9 +13,6 @@ namespace al::gl
         ////////////////////////////////////////////////////////////////////////////////
         class mesh
         {
-                buffer<float> mVbo;
-                buffer<unsigned> mEbo;
-
                 std::vector<vao_info> mInfos;
                 vao<float, unsigned> mVao;
 
