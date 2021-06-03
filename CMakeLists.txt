@@ -8,6 +8,9 @@ option(DEBUG "Enable Debug Mode" ON)
 # configure settings
 configure_file(${CMAKE_SOURCE_DIR}/src/config.h.in ${CMAKE_SOURCE_DIR}/src/config.h)
 
+# set the directories
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 # c++ settings
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
@@ -67,8 +70,8 @@ include_directories (
         "${CMAKE_SOURCE_DIR}/src"
 )
 
-# define the executable
-add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
+# define the library
+add_library(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
 
 # add external libraries
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
@@ -86,3 +89,16 @@ set(LIBS ${LIBS} stb_image)
 # set the external libraries
 set(LIBS ${LIBS} OpenGL::OpenGL glfw assimp rt m dl)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBS})
+
+# start building examples
+file (
+        GLOB_RECURSE SPONZA_HEADER_FILES
+        ${CMAKE_SOURCE_DIR}/examples/sponza/*.h
+)
+file (
+        GLOB_RECURSE SPONZA_SOURCE_FILES
+        ${CMAKE_SOURCE_DIR}/examples/sponza/*.cpp
+)
+set(EXAMPLE_SPONZA sponza)
+add_executable(${EXAMPLE_SPONZA} ${SPONZA_HEADER_FILES} ${SPONZA_SOURCE_FILES})
+target_link_libraries(${EXAMPLE_SPONZA} PUBLIC ${LIBS} ${PROJECT_NAME})
