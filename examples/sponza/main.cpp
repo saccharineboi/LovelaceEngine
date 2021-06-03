@@ -243,11 +243,11 @@ int main(void)
                 while (!glfwWindowShouldClose(window)) {
                         float dt = []() {
                                 static float lastTime;
-                                static bool firstTime = true;
+                                static bool firstRun = true;
 
                                 float currentTime = (float)glfwGetTime();
-                                if (firstTime) {
-                                        firstTime = false;
+                                if (firstRun) {
+                                        firstRun = false;
                                         lastTime = currentTime;
                                 }
 
@@ -270,11 +270,10 @@ int main(void)
                         glm::mat4 sceneNormal = glm::transpose(glm::inverse(sceneModel));
                         glm::mat4 scenePVM = projection * view * sceneModel;
 
-                        sceneMat.mPVM = &scenePVM;
-                        sceneMat.mModel = &sceneModel;
-                        sceneMat.mNormal = &sceneNormal;
-                        sceneMat.mViewPos = &camera.mPosition;
-                        scene.draw(sceneMat);
+                        sceneMat.use();
+                        sceneMat.update(camera.mPosition, sceneNormal, sceneModel, scenePVM);
+                        scene.draw();
+                        sceneMat.halt();
 
                         glfwSwapBuffers(window);
                         glfwPollEvents();

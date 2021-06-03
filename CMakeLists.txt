@@ -40,7 +40,6 @@ list(APPEND CMAKE_CXX_FLAGS "-Wall \
                              -Winit-self \
                              -Wlogical-op \
                              -Wmissing-include-dirs \
-                             -Wno-except \
                              -Woverloaded-virtual \
                              -Wredundant-decls \
                              -Wshadow \

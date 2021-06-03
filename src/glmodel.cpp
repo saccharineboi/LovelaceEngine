@@ -104,12 +104,9 @@ namespace al::gl
         }
 
         ////////////////////////////////////////////////////////////////////////////////
-        void model::draw(abstract_material& material, int mode) const
+        void model::draw(int mode) const
         {
-                material.use();
-                material.update();
                 for (const mesh& m : mMeshes)
                         m.draw(mode);
-                material.halt();
         }
 }

@@ -27,71 +27,55 @@ namespace al::gl
 
                 void use() const                        { mProgram.use(); }
                 void halt() const                       { mProgram.halt(); }
-
-                virtual void update()                   = 0;
         };
 
         ////////////////////////////////////////////////////////////////////////////////
         struct basic_color_material final : public abstract_material
         {
-                glm::vec4 mColor                        = glm::vec4(1.0f, 0.5f, 0.25f, 1.0f);
-                glm::mat4* mPVM                         = nullptr;
-
                 basic_color_material();
 
-                virtual void update() override
+                void update(const glm::vec4& color, const glm::mat4& pvm)
                 {
                         using namespace std::string_literals;
-
-                        mProgram.uniform("uPVM"s, *mPVM);
-                        mProgram.uniform("uColor"s, mColor);
+                        mProgram.uniform("uColor"s, color);
+                        mProgram.uniform("uPVM"s, pvm);
                 }
         };
 
         ////////////////////////////////////////////////////////////////////////////////
         struct basic_color_interpolated_material final : public abstract_material
         {
-                glm::mat4* mPVM                         = nullptr;
-
                 basic_color_interpolated_material();
 
-                virtual void update() override
+                void update(const glm::mat4& pvm)
                 {
                         using namespace std::string_literals;
-
-                        mProgram.uniform("uPVM"s, *mPVM);
+                        mProgram.uniform("uPVM"s, pvm);
                 }
         };
 
         ////////////////////////////////////////////////////////////////////////////////
         struct basic_texture_material final : public abstract_material
         {
-                glm::mat4* mPVM                         = nullptr;
-
                 basic_texture_material();
 
-                virtual void update() override
+                void update(const glm::mat4& pvm)
                 {
                         using namespace std::string_literals;
-
-                        mProgram.uniform("uPVM"s, *mPVM);
+                        mProgram.uniform("uPVM"s, pvm);
                 }
         };
 
         ////////////////////////////////////////////////////////////////////////////////
         struct basic_texture_interpolated_material final : public abstract_material
         {
-                glm::mat4* mPVM                         = nullptr;
-                float mInterpolation                    = 0.5f;
-
                 basic_texture_interpolated_material();
 
-                virtual void update() override
+                void update(float interpolation, const glm::mat4& pvm)
                 {
                         using namespace std::string_literals;
-
-                        mProgram.uniform("uInterpolation"s, mInterpolation);
-                        mProgram.uniform("uPVM"s, *mPVM);
+                        mProgram.uniform("uInterpolation"s, interpolation);
+                        mProgram.uniform("uPVM"s, pvm);
                 }
         };
 
@@ -111,21 +95,16 @@ namespace al::gl
                 glm::vec3 mSpecular                      = glm::vec3(1.0f, 1.0f, 1.0f);
                 float mShininess                         = 16.0f;
 
-                glm::mat4* mPVM                          = nullptr;
-                glm::mat4* mModel                        = nullptr;
-                glm::mat4* mNormal                       = nullptr;
-                glm::vec3* mViewPos                      = nullptr;
-
                 phong_material();
 
-                virtual void update() override
+                void update(const glm::vec3& viewPos, const glm::mat4& normal, const glm::mat4& model, const glm::mat4& pvm)
                 {
                         using namespace std::string_literals;
 
-                        mProgram.uniform("uPVM"s, *mPVM);
-                        mProgram.uniform("uModel"s, *mModel);
-                        mProgram.uniform("uNormal"s, *mNormal);
-                        mProgram.uniform("uViewPos"s, *mViewPos);
+                        mProgram.uniform("uViewPos"s, viewPos);
+                        mProgram.uniform("uNormal"s, normal);
+                        mProgram.uniform("uModel"s, model);
+                        mProgram.uniform("uPVM"s, pvm);
 
                         mProgram.uniform("uMaterial.ambient"s, mAmbient);
                         mProgram.uniform("uMaterial.diffuse"s, mDiffuse);
@@ -183,24 +162,19 @@ namespace al::gl
 
                 float mShininess                         = 16.0f;
 
-                glm::mat4* mPVM                          = nullptr;
-                glm::mat4* mModel                        = nullptr;
-                glm::mat4* mNormal                       = nullptr;
-                glm::vec3* mViewPos                      = nullptr;
-
                 glm::vec2 mTextureTile                   = glm::vec2(1.0f);
                 glm::vec2 mTextureOffset                 = glm::vec2(0.0f);
 
                 phong_textured_material();
 
-                virtual void update() override
+                void update(const glm::vec3& viewPos, const glm::mat4& normal, const glm::mat4& model, const glm::mat4& pvm)
                 {
                         using namespace std::string_literals;
 
-                        mProgram.uniform("uPVM"s, *mPVM);
-                        mProgram.uniform("uModel"s, *mModel);
-                        mProgram.uniform("uNormal"s, *mNormal);
-                        mProgram.uniform("uViewPos"s, *mViewPos);
+                        mProgram.uniform("uViewPos"s, viewPos);
+                        mProgram.uniform("uNormal"s, normal);
+                        mProgram.uniform("uModel"s, model);
+                        mProgram.uniform("uPVM"s, pvm);
 
                         mProgram.uniform("uTextureTile"s, mTextureTile);
                         mProgram.uniform("uTextureOffset"s, mTextureOffset);
@@ -268,14 +242,14 @@ namespace al::gl
 
                 gouraud_material();
 
-                virtual void update() override
+                void update(const glm::vec3& viewPos, const glm::mat4& normal, const glm::mat4& model, const glm::mat4& pvm)
                 {
                         using namespace std::string_literals;
 
-                        mProgram.uniform("uPVM"s, *mPVM);
-                        mProgram.uniform("uModel"s, *mModel);
-                        mProgram.uniform("uNormal"s, *mNormal);
-                        mProgram.uniform("uViewPos"s, *mViewPos);
+                        mProgram.uniform("uViewPos"s, viewPos);
+                        mProgram.uniform("uNormal"s, normal);
+                        mProgram.uniform("uModel"s, model);
+                        mProgram.uniform("uPVM"s, pvm);
 
                         mProgram.uniform("uMaterial.ambient"s, mAmbient);
                         mProgram.uniform("uMaterial.diffuse"s, mDiffuse);

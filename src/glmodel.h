@@ -23,7 +23,7 @@ namespace al::gl
         public:
                 explicit model(const std::string& path);
 
-                void draw(abstract_material& material, int mode = GL_TRIANGLES) const;
+                void draw(int mode = GL_TRIANGLES) const;
 
                 std::string getPath() const                             { return mPath; }
                 size_t getNumMeshes() const                             { return mMeshes.size(); }
