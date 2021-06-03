@@ -10,3 +10,6 @@ models/
 
 # texture files
 textures/
+
+# vim swap files
+*.swp
