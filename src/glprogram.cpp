@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "glprogram.h"
 #include "error.h"
 
@@ -45,7 +43,10 @@ namespace al::gl
         program::program(std::initializer_list<shader*> shaders)
         {
                 for (shader* s : shaders) {
-                        assert(s != nullptr);
+#ifdef DEBUG
+                        if (!s)
+                                throw exception("al::gl", "program", "program", "received null shader in constructor", etype::unexpected);
+#endif
                         mShaders.push_back(s);
                 }
 

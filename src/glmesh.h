@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <string>
-#include <cassert>
 
 #include "glbuffer.h"
 #include "glvao.h"
@@ -18,18 +17,14 @@ namespace al::gl
 
                 void bindTextures() const
                 {
-                        for (int i = 0; i < static_cast<int>(mTextures.size()); ++i) {
-                                assert(mTextures[i] != nullptr);
+                        for (int i = 0; i < static_cast<int>(mTextures.size()); ++i)
                                 mTextures[i]->bind(i);
-                        }
                 }
 
                 void unbindTextures() const
                 {
-                        for (int i = static_cast<int>(mTextures.size()) - 1; i >= 0; --i) {
-                                assert(mTextures[i] != nullptr);
+                        for (int i = static_cast<int>(mTextures.size()) - 1; i >= 0; --i)
                                 mTextures[i]->unbind(i);
-                        }
                 }
         public:
                 std::vector<texture2D*> mTextures;

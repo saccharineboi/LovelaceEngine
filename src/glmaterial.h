@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-#include <cassert>
-
 #include "glshader.h"
 #include "glprogram.h"
 #include "gltexture2D.h"
@@ -45,7 +43,6 @@ namespace al::gl
                 {
                         using namespace std::string_literals;
 
-                        assert(mPVM != nullptr);
                         mProgram.uniform("uPVM"s, *mPVM);
                         mProgram.uniform("uColor"s, mColor);
                 }
@@ -62,7 +59,6 @@ namespace al::gl
                 {
                         using namespace std::string_literals;
 
-                        assert(mPVM != nullptr);
                         mProgram.uniform("uPVM"s, *mPVM);
                 }
         };
@@ -78,7 +74,6 @@ namespace al::gl
                 {
                         using namespace std::string_literals;
 
-                        assert(mPVM != nullptr);
                         mProgram.uniform("uPVM"s, *mPVM);
                 }
         };
@@ -95,7 +90,6 @@ namespace al::gl
                 {
                         using namespace std::string_literals;
 
-                        assert(mPVM != nullptr);
                         mProgram.uniform("uInterpolation"s, mInterpolation);
                         mProgram.uniform("uPVM"s, *mPVM);
                 }
@@ -128,8 +122,6 @@ namespace al::gl
                 {
                         using namespace std::string_literals;
 
-                        assert(mPVM != nullptr && mModel != nullptr && mNormal != nullptr && mViewPos != nullptr);
-
                         mProgram.uniform("uPVM"s, *mPVM);
                         mProgram.uniform("uModel"s, *mModel);
                         mProgram.uniform("uNormal"s, *mNormal);
@@ -141,8 +133,6 @@ namespace al::gl
                         mProgram.uniform("uMaterial.shininess"s, mShininess);
 
                         for (size_t i = 0; i < mDirLights.size() && i < NUM_DIR_LIGHTS; ++i) {
-                                assert(mDirLights[i] != nullptr);
-
                                 std::string s = "uDirLights["s + std::to_string(i);
                                 mProgram.uniform(s + "].ambient"s,              mDirLights[i]->mAmbient);
                                 mProgram.uniform(s + "].diffuse"s,              mDirLights[i]->mDiffuse);
@@ -152,8 +142,6 @@ namespace al::gl
                         }
 
                         for (size_t i = 0; i < mPointLights.size() && i < NUM_POINT_LIGHTS; ++i) {
-                                assert(mPointLights[i] != nullptr);
-
                                 std::string s = "uPointLights["s + std::to_string(i);
                                 mProgram.uniform(s + "].diffuse"s,              mPointLights[i]->mDiffuse);
                                 mProgram.uniform(s + "].specular"s,             mPointLights[i]->mSpecular);
@@ -166,8 +154,6 @@ namespace al::gl
                         }
 
                         for (size_t i = 0; i < mSpotLights.size() && i < NUM_SPOT_LIGHTS; ++i) {
-                                assert(mSpotLights[i] != nullptr);
-
                                 std::string s = "uSpotLights["s + std::to_string(i);
                                 mProgram.uniform(s + "].diffuse"s,              mSpotLights[i]->mDiffuse);
                                 mProgram.uniform(s + "].specular"s,             mSpotLights[i]->mSpecular);
@@ -211,8 +197,6 @@ namespace al::gl
                 {
                         using namespace std::string_literals;
 
-                        assert(mPVM != nullptr && mModel != nullptr && mNormal != nullptr && mViewPos != nullptr);
-
                         mProgram.uniform("uPVM"s, *mPVM);
                         mProgram.uniform("uModel"s, *mModel);
                         mProgram.uniform("uNormal"s, *mNormal);
@@ -224,8 +208,6 @@ namespace al::gl
                         mProgram.uniform("uMaterial.shininess"s, mShininess);
 
                         for (size_t i = 0; i < mDirLights.size() && i < NUM_DIR_LIGHTS; ++i) {
-                                assert(mDirLights[i] != nullptr);
-
                                 std::string s = "uDirLights["s + std::to_string(i);
                                 mProgram.uniform(s + "].ambient"s,              mDirLights[i]->mAmbient);
                                 mProgram.uniform(s + "].diffuse"s,              mDirLights[i]->mDiffuse);
@@ -235,8 +217,6 @@ namespace al::gl
                         }
 
                         for (size_t i = 0; i < mPointLights.size() && i < NUM_POINT_LIGHTS; ++i) {
-                                assert(mPointLights[i] != nullptr);
-
                                 std::string s = "uPointLights["s + std::to_string(i);
                                 mProgram.uniform(s + "].diffuse"s,              mPointLights[i]->mDiffuse);
                                 mProgram.uniform(s + "].specular"s,             mPointLights[i]->mSpecular);
@@ -249,8 +229,6 @@ namespace al::gl
                         }
 
                         for (size_t i = 0; i < mSpotLights.size() && i < NUM_SPOT_LIGHTS; ++i) {
-                                assert(mSpotLights[i] != nullptr);
-
                                 std::string s = "uSpotLights["s + std::to_string(i);
                                 mProgram.uniform(s + "].diffuse"s,              mSpotLights[i]->mDiffuse);
                                 mProgram.uniform(s + "].specular"s,             mSpotLights[i]->mSpecular);
@@ -294,8 +272,6 @@ namespace al::gl
                 {
                         using namespace std::string_literals;
 
-                        assert(mPVM != nullptr && mModel != nullptr && mNormal != nullptr && mViewPos != nullptr);
-
                         mProgram.uniform("uPVM"s, *mPVM);
                         mProgram.uniform("uModel"s, *mModel);
                         mProgram.uniform("uNormal"s, *mNormal);
@@ -307,8 +283,6 @@ namespace al::gl
                         mProgram.uniform("uMaterial.shininess"s, mShininess);
 
                         for (size_t i = 0; i < mDirLights.size() && i < NUM_DIR_LIGHTS; ++i) {
-                                assert(mDirLights[i] != nullptr);
-
                                 std::string s = "uDirLights["s + std::to_string(i);
                                 mProgram.uniform(s + "].ambient"s,              mDirLights[i]->mAmbient);
                                 mProgram.uniform(s + "].diffuse"s,              mDirLights[i]->mDiffuse);
@@ -318,8 +292,6 @@ namespace al::gl
                         }
 
                         for (size_t i = 0; i < mPointLights.size() && i < NUM_POINT_LIGHTS; ++i) {
-                                assert(mPointLights[i] != nullptr);
-
                                 std::string s = "uPointLights["s + std::to_string(i);
                                 mProgram.uniform(s + "].diffuse"s,              mPointLights[i]->mDiffuse);
                                 mProgram.uniform(s + "].specular"s,             mPointLights[i]->mSpecular);
@@ -332,8 +304,6 @@ namespace al::gl
                         }
 
                         for (size_t i = 0; i < mSpotLights.size() && i < NUM_SPOT_LIGHTS; ++i) {
-                                assert(mSpotLights[i] != nullptr);
-
                                 std::string s = "uSpotLights["s + std::to_string(i);
                                 mProgram.uniform(s + "].diffuse"s,              mSpotLights[i]->mDiffuse);
                                 mProgram.uniform(s + "].specular"s,             mSpotLights[i]->mSpecular);
