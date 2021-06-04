@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include <iostream>
 
+#ifdef DEBUG
+
 namespace al::gl
 {
         // source: https://learnopengl.com/In-Practice/Debugging
@@ -51,3 +53,4 @@ namespace al::gl
         }
 }
 
+#endif
