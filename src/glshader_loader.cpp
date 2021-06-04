@@ -13,23 +13,28 @@ namespace al::gl::shader_loader
         static std::unordered_map<std::string, shader> shaders;
 
         ////////////////////////////////////////////////////////////////////////////////
-        shader* load(const std::string& url)
+        shader* load(int type, const std::string& url)
         {
-                auto s = shaders.find(url);
-                if (s == shaders.end()) {
-                        int type = [](auto& path) {
-                                if (path.find(".vert") != std::string::npos)
-                                        return GL_VERTEX_SHADER;
-                                else if (path.find(".frag") != std::string::npos)
-                                        return GL_FRAGMENT_SHADER;
-                                else
-                                        throw exception("al::gl::shader_loader", "none", "load", "shader type unknown", etype::unexpected);
-                        }(url);
-                        auto r = shaders.emplace(url, std::move(shader(type, read(url))));
+                auto id = url + std::to_string(type);
+                auto savedShader = shaders.find(id);
+                if (savedShader == shaders.end()) {
+                        auto shaderSource = std::string("#version 400 core\n");
+                        shaderSource += [](int shaderType) {
+                                switch (shaderType) {
+                                        case GL_VERTEX_SHADER:
+                                                return "#define VERTEX_SHADER\n";
+                                        case GL_FRAGMENT_SHADER:
+                                                return "#define FRAGMENT_SHADER\n";
+                                        default:
+                                                return "#define UNKNOWN_SHADER\n";
+                                }
+                        }(type);
+                        shaderSource += read(url);
+                        auto result = shaders.emplace(id, std::move(shader(type, shaderSource)));
                         log(std::cout, "[Lovelace] [al::gl::shader_loader] Loaded ", url);
-                        return &r.first->second;
+                        return &result.first->second;
                 }
-                return &s->second;
+                return &savedShader->second;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

@@ -239,6 +239,9 @@ int main(void)
                 sceneMat.mShininess = 32.0f;
                 sceneMat.mDirLights.push_back(&sun);
 
+                // material for cube
+                al::gl::basic_color_material cubeMat;
+
                 // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 while (!glfwWindowShouldClose(window)) {
                         float dt = []() {
@@ -264,8 +267,6 @@ int main(void)
 
                         // draw scene
                         glm::mat4 sceneModel = glm::mat4(1.0f);
-                        sceneModel = glm::rotate(sceneModel, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-                        sceneModel = glm::scale(sceneModel, glm::vec3(1.0f));
                         sceneModel = glm::scale(sceneModel, glm::vec3(0.1f));
                         glm::mat4 sceneNormal = glm::transpose(glm::inverse(sceneModel));
                         glm::mat4 scenePVM = projection * view * sceneModel;
@@ -274,6 +275,17 @@ int main(void)
                         sceneMat.update(camera.mPosition, sceneNormal, sceneModel, scenePVM);
                         scene.draw();
                         sceneMat.halt();
+
+                        // draw cube
+                        glm::mat4 cubeModel = glm::mat4(1.0f);
+                        cubeModel = glm::translate(cubeModel, glm::vec3(5.0f, 5.0f, 0.0f));
+                        glm::mat4 cubeNormal = glm::transpose(glm::inverse(cubeModel));
+                        glm::mat4 cubePVM = projection * view * cubeModel;
+
+                        cubeMat.use();
+                        cubeMat.update(glm::vec4(1.0f, 0.5f, 0.25f, 1.0f), cubePVM);
+                        cube.draw();
+                        cubeMat.halt();
 
                         glfwSwapBuffers(window);
                         glfwPollEvents();

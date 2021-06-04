@@ -6,45 +6,43 @@ namespace al::gl
 {
         ////////////////////////////////////////////////////////////////////////////////
         static const char* shader_urls[] = {
-                /* Vertex Shader */                                                       /* Fragment Shader */
-                LOVELACE_ROOT_DIR "shaders/basic_color.vert",                             LOVELACE_ROOT_DIR "shaders/basic_color.frag",
-                LOVELACE_ROOT_DIR "shaders/basic_color_interpolated.vert",                LOVELACE_ROOT_DIR "shaders/basic_color_interpolated.frag",
-                LOVELACE_ROOT_DIR "shaders/basic_texture.vert",                           LOVELACE_ROOT_DIR "shaders/basic_texture.frag",
-                LOVELACE_ROOT_DIR "shaders/basic_texture_interpolated.vert",              LOVELACE_ROOT_DIR "shaders/basic_texture_interpolated.frag",
-                LOVELACE_ROOT_DIR "shaders/phong.vert",                                   LOVELACE_ROOT_DIR "shaders/phong.frag",
-                LOVELACE_ROOT_DIR "shaders/gouraud.vert",                                 LOVELACE_ROOT_DIR "shaders/gouraud.frag",
-                LOVELACE_ROOT_DIR "shaders/phong_textured.vert",                          LOVELACE_ROOT_DIR "shaders/phong_textured.frag"
+                LOVELACE_ROOT_DIR "shaders/basic_color.glsl",
+                LOVELACE_ROOT_DIR "shaders/basic_color_interpolated.glsl",
+                LOVELACE_ROOT_DIR "shaders/basic_texture.glsl",
+                LOVELACE_ROOT_DIR "shaders/basic_texture_interpolated.glsl",
+                LOVELACE_ROOT_DIR "shaders/phong.glsl",
+                LOVELACE_ROOT_DIR "shaders/gouraud.glsl",
+                LOVELACE_ROOT_DIR "shaders/phong_textured.glsl",
         };
 
         ////////////////////////////////////////////////////////////////////////////////
         enum ShaderUrlIndex {
-                /* Vertex Shader */                                     /* Fragment Shader */
-                BasicColorVert,                                         BasicColorFrag,
-                BasicColorInterpolatedVert,                             BasicColorInterpolatedFrag,
-                BasicTextureVert,                                       BasicTextureFrag,
-                BasicTextureInterpolatedVert,                           BasicTextureInterpolatedFrag,
-                PhongVert,                                              PhongFrag,
-                GouraudVert,                                            GouraudFrag,
-                PhongTexturedVert,                                      PhongTexturedFrag
+                BasicColor,
+                BasicColorInterpolated,
+                BasicTexture,
+                BasicTextureInterpolated,
+                Phong,
+                Gouraud,
+                PhongTextured,
         };
 
         ////////////////////////////////////////////////////////////////////////////////
-        abstract_material::abstract_material(int vshader_url_index, int fshader_url_index)
-                : mVshader{shader_loader::load(shader_urls[vshader_url_index])},
-                  mFshader{shader_loader::load(shader_urls[fshader_url_index])},
+        abstract_material::abstract_material(int shader_url_index)
+                : mVshader{ shader_loader::load(GL_VERTEX_SHADER, shader_urls[shader_url_index]) },
+                  mFshader{ shader_loader::load(GL_FRAGMENT_SHADER, shader_urls[shader_url_index]) },
                   mProgram{ mVshader, mFshader } {}
 
         ////////////////////////////////////////////////////////////////////////////////
         basic_color_material::basic_color_material()
-                : abstract_material(BasicColorVert, BasicColorFrag) {}
+                : abstract_material(BasicColor) {}
 
         ////////////////////////////////////////////////////////////////////////////////
         basic_color_interpolated_material::basic_color_interpolated_material()
-                : abstract_material(BasicColorInterpolatedVert, BasicColorInterpolatedFrag) {}
+                : abstract_material(BasicColorInterpolated) {}
 
         ////////////////////////////////////////////////////////////////////////////////
         basic_texture_material::basic_texture_material()
-                : abstract_material(BasicTextureVert, BasicTextureFrag)
+                : abstract_material(BasicTexture)
         {
                 mProgram.use();
                 mProgram.uniform("uTexture", 0);
@@ -53,7 +51,7 @@ namespace al::gl
 
         ////////////////////////////////////////////////////////////////////////////////
         basic_texture_interpolated_material::basic_texture_interpolated_material()
-                : abstract_material(BasicTextureInterpolatedVert, BasicTextureInterpolatedFrag)
+                : abstract_material(BasicTextureInterpolated)
         {
                 mProgram.use();
                 mProgram.uniform("uTexture0", 0);
@@ -63,11 +61,11 @@ namespace al::gl
 
         ////////////////////////////////////////////////////////////////////////////////
         phong_material::phong_material()
-                : abstract_material(PhongVert, PhongFrag) {}
+                : abstract_material(Phong) {}
 
         ////////////////////////////////////////////////////////////////////////////////
         phong_textured_material::phong_textured_material()
-                : abstract_material(PhongTexturedVert, PhongTexturedFrag)
+                : abstract_material(PhongTextured)
         {
                 mProgram.use();
                 mProgram.uniform("uMaterial.diffuse", 0);
@@ -77,5 +75,5 @@ namespace al::gl
 
         ////////////////////////////////////////////////////////////////////////////////
         gouraud_material::gouraud_material()
-                : abstract_material(GouraudVert, GouraudFrag) {}
+                : abstract_material(Gouraud) {}
 }

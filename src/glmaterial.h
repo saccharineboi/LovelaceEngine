@@ -22,7 +22,7 @@ namespace al::gl
                 program mProgram;
 
         public:
-                abstract_material(int vshader_url_index, int fshader_url_index);
+                explicit abstract_material(int shader_url_index);
                 ~abstract_material() {}
 
                 void use() const                        { mProgram.use(); }
