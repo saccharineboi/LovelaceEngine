@@ -175,9 +175,9 @@ vec3 computeSpotLight(material_cached_t material, spotLight_t light, vec3 normal
 material_cached_t genCachedMaterial(material_t material)
 {
         material_cached_t material_cached;
-        material_cached.diffuse = texture(uMaterial.diffuse, vTexCoord);
-        material_cached.specular = texture(uMaterial.specular, vTexCoord);
-        material_cached.shininess = uMaterial.shininess;
+        material_cached.diffuse = texture(material.diffuse, vTexCoord);
+        material_cached.specular = texture(material.specular, vTexCoord);
+        material_cached.shininess = material.shininess;
         return material_cached;
 }
 
