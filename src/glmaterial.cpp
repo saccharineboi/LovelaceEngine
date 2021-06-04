@@ -11,7 +11,6 @@ namespace al::gl
                 LOVELACE_ROOT_DIR "shaders/basic_texture.glsl",
                 LOVELACE_ROOT_DIR "shaders/basic_texture_interpolated.glsl",
                 LOVELACE_ROOT_DIR "shaders/phong.glsl",
-                LOVELACE_ROOT_DIR "shaders/gouraud.glsl",
                 LOVELACE_ROOT_DIR "shaders/phong_textured.glsl",
         };
 
@@ -22,7 +21,6 @@ namespace al::gl
                 BasicTexture,
                 BasicTextureInterpolated,
                 Phong,
-                Gouraud,
                 PhongTextured,
         };
 
@@ -72,8 +70,4 @@ namespace al::gl
                 mProgram.uniform("uMaterial.specular", 1);
                 mProgram.halt();
         }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        gouraud_material::gouraud_material()
-                : abstract_material(Gouraud) {}
 }
