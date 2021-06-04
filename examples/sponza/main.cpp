@@ -222,8 +222,8 @@ int main(void)
                 camera.mSpeed = 25.0f;
 
                 // meshes
-                al::gl::model scene(LOVELACE_ROOT_DIR "models/sponza/sponza.obj");
-                al::gl::mesh cube = al::gl::genCube();
+                al::gl::model sponza(LOVELACE_ROOT_DIR "models/sponza/sponza.obj");
+                auto cube = al::gl::genCube();
 
                 // directional light
                 al::dir_light sun = {
@@ -234,13 +234,13 @@ int main(void)
                         0.5f                                    // intensity
                 };
 
-                // material for scene
-                al::gl::phong_textured_material sceneMat;
-                sceneMat.mShininess = 32.0f;
-                sceneMat.mDirLights.push_back(&sun);
+                // material for sponza
+                al::gl::phong_textured_material sponzaMat;
+                sponzaMat.mDirLights.push_back(&sun);
 
                 // material for cube
-                al::gl::basic_color_material cubeMat;
+                al::gl::phong_material cubeMat;
+                cubeMat.mDirLights.push_back(&sun);
 
                 // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 while (!glfwWindowShouldClose(window)) {
@@ -265,25 +265,24 @@ int main(void)
                         glm::mat4 projection = camera.getProjection();
                         glm::mat4 view = camera.getView();
 
-                        // draw scene
-                        glm::mat4 sceneModel = glm::mat4(1.0f);
-                        sceneModel = glm::scale(sceneModel, glm::vec3(0.1f));
-                        glm::mat4 sceneNormal = glm::transpose(glm::inverse(sceneModel));
-                        glm::mat4 scenePVM = projection * view * sceneModel;
+                        glm::mat4 sponzaModel = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+                        glm::mat4 sponzaNormal = glm::transpose(glm::inverse(sponzaModel));
+                        glm::mat4 sponzaPVM = projection * view * sponzaModel;
 
-                        sceneMat.use();
-                        sceneMat.update(camera.mPosition, sceneNormal, sceneModel, scenePVM);
-                        scene.draw();
-                        sceneMat.halt();
+                        // draw sponza
+                        sponzaMat.use();
+                        sponzaMat.update(camera.mPosition, sponzaNormal, sponzaModel, sponzaPVM);
+                        sponza.draw();
+                        sponzaMat.halt();
 
-                        // draw cube
-                        glm::mat4 cubeModel = glm::mat4(1.0f);
-                        cubeModel = glm::translate(cubeModel, glm::vec3(5.0f, 5.0f, 0.0f));
+                        glm::vec4 cubeColor = glm::vec4(1.0f, 0.5f, 0.25f, 1.0f);
+                        glm::mat4 cubeModel = glm::translate(glm::mat4(1.0f), glm::vec3(5.0f, 5.0f, 0.0f));
                         glm::mat4 cubeNormal = glm::transpose(glm::inverse(cubeModel));
                         glm::mat4 cubePVM = projection * view * cubeModel;
 
+                        // draw cube
                         cubeMat.use();
-                        cubeMat.update(glm::vec4(1.0f, 0.5f, 0.25f, 1.0f), cubePVM);
+                        cubeMat.update(camera.mPosition, cubeNormal, cubeModel, cubePVM);
                         cube.draw();
                         cubeMat.halt();
 
