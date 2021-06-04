@@ -28,4 +28,10 @@ namespace al::gl
                 std::string getPath() const                             { return mPath; }
                 size_t getNumMeshes() const                             { return mMeshes.size(); }
         };
+
+        ////////////////////////////////////////////////////////////////////////////////
+        inline bool operator==(const model& first, const model& second) { return first.getPath() == second.getPath(); }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        inline bool operator!=(const model& first, const model& second) { return first.getPath() != second.getPath(); }
 }
