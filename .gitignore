@@ -5,8 +5,5 @@
 # build files
 build/
 
-# texture files
-textures/
-
 # vim swap files
 *.swp
