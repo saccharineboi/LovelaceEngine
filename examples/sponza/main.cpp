@@ -212,6 +212,7 @@ int main(void)
         glfwSwapInterval(1);
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
+        glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_STENCIL_TEST);
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
