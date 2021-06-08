@@ -5,9 +5,6 @@
 # build files
 build/
 
-# 3D object files
-models/
-
 # texture files
 textures/
 
