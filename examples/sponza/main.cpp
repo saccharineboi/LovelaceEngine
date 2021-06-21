@@ -223,7 +223,7 @@ int main(void)
                 camera.mSpeed = 25.0f;
 
                 // meshes
-                al::gl::model sponza(LOVELACE_ROOT_DIR "models/sponza/sponza.obj");
+                al::gl::model sponza(LOVELACE_ROOT_DIR "models/sponza/Sponza.gltf");
                 auto cube = al::gl::genCube();
 
                 // directional light
