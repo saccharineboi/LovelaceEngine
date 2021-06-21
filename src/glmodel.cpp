@@ -13,7 +13,6 @@ namespace al::gl
                 if (!ai_scene || ai_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !ai_scene->mRootNode)
                         throw exception("al::gl", "model", "model", importer.GetErrorString(), etype::unexpected);
 
-                mMeshes.reserve(ai_scene->mNumMeshes);
                 processNode(ai_scene->mRootNode, ai_scene);
         }
 
