@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <string>
-
 #include "glbuffer.h"
 #include "glvao.h"
 #include "gltexture2D.h"
+
+#include <vector>
+#include <string>
 
 namespace al::gl
 {

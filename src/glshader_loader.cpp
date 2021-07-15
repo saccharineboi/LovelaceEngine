@@ -1,11 +1,12 @@
-#include <unordered_map>
-#include <glad/glad.h>
-#include <string>
-
 #include "glshader_loader.h"
 #include "error.h"
 #include "log.h"
 #include "io.h"
+
+#include <glad/glad.h>
+
+#include <unordered_map>
+#include <string>
 
 namespace al::gl::shader_loader
 {

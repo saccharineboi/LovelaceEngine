@@ -1,11 +1,8 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <initializer_list>
-#include <vector>
-#include <unordered_map>
-#include <string>
+#include "glshader.h"
 
+#include <glad/glad.h>
 #include <glm/mat2x2.hpp>
 #include <glm/mat3x3.hpp>
 #include <glm/mat4x4.hpp>
@@ -14,7 +11,10 @@
 #include <glm/vec4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "glshader.h"
+#include <initializer_list>
+#include <vector>
+#include <unordered_map>
+#include <string>
 
 namespace al::gl
 {

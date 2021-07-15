@@ -1,8 +1,9 @@
-#include <string>
-#include <stb/stb_image.h>
-
 #include "error.h"
 #include "gltexture2D.h"
+
+#include <stb/stb_image.h>
+
+#include <string>
 
 namespace al::gl
 {

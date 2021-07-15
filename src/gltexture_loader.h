@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
-
 #include "gltexture2D.h"
+
+#include <string>
 
 namespace al::gl::texture_loader
 {

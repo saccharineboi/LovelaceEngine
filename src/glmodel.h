@@ -1,14 +1,14 @@
 #pragma once
 
-#include <vector>
-#include <map>
+#include "glmesh.h"
+#include "glmaterial.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "glmesh.h"
-#include "glmaterial.h"
+#include <vector>
+#include <map>
 
 namespace al::gl
 {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
-
 #include "glshader.h"
+
+#include <string>
 
 namespace al::gl::shader_loader
 {

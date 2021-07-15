@@ -1,7 +1,7 @@
+#include "fpscamera.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-#include "fpscamera.h"
 
 #define LERP(RES, START, END, DELTA) ((RES) = (START) + (DELTA) * ((END) - (START)))
 

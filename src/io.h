@@ -1,9 +1,9 @@
 #pragma once
 
+#include "error.h"
+
 #include <fstream>
 #include <string>
-
-#include "error.h"
 
 namespace al
 {

@@ -1,10 +1,11 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <vector>
-
 #include "glbuffer.h"
 #include "glutils.h"
+
+#include <glad/glad.h>
+
+#include <vector>
 
 namespace al::gl
 {

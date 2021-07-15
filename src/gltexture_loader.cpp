@@ -1,8 +1,8 @@
-#include <unordered_map>
-#include <string>
-
 #include "gltexture_loader.h"
 #include "log.h"
+
+#include <unordered_map>
+#include <string>
 
 namespace al::gl::texture_loader
 {

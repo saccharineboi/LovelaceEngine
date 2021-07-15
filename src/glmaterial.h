@@ -1,15 +1,16 @@
 #pragma once
 
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
-#include <string>
-#include <vector>
-
 #include "glshader.h"
 #include "glprogram.h"
 #include "gltexture2D.h"
 #include "lights.h"
+
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
+
+#include <string>
+#include <vector>
 
 namespace al::gl
 {
