@@ -18,7 +18,7 @@ namespace al::gl::texture_loader
                         auto r = textures2D.emplace(url, std::move(texture2D(url)));
                         int sizeInBytes = r.first->second.getSizeInBytes();
                         totalBytesLoaded += sizeInBytes;
-                        log(std::cout, "[Lovelace] [al::gl::texture_loader] Loaded ", url, " [", sizeInBytes, " bytes]");
+                        log(std::cout, __FILE__, __LINE__, "[Lovelace] [al::gl::texture_loader] Loaded ", url, " [", sizeInBytes, " bytes]");
                         return &r.first->second;
                 }
                 return &tex->second;
@@ -34,6 +34,6 @@ namespace al::gl::texture_loader
         void clear()
         {
                 textures2D.clear();
-                log(std::cout, "[Lovelace] [al::gl::texture_loader] Cleared textures2D");
+                log(std::cout, __FILE__, __LINE__, "[Lovelace] [al::gl::texture_loader] Cleared textures2D");
         }
 }

@@ -32,7 +32,7 @@ namespace al::gl::shader_loader
                         }(type);
                         shaderSource += read(url);
                         auto result = shaders.emplace(id, std::move(shader(type, shaderSource)));
-                        log(std::cout, "[Lovelace] [al::gl::shader_loader] Loaded ", url);
+                        log(std::cout, __FILE__, __LINE__, "[Lovelace] [al::gl::shader_loader] Loaded ", url);
                         return &result.first->second;
                 }
                 return &savedShader->second;
@@ -42,6 +42,6 @@ namespace al::gl::shader_loader
         void clear()
         {
                 shaders.clear();
-                log(std::cout, "[Lovelace] [al::gl::shader_loader] Cleared shaders");
+                log(std::cout, __FILE__, __LINE__, "[Lovelace] [al::gl::shader_loader] Cleared shaders");
         }
 }

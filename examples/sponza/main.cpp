@@ -151,7 +151,7 @@ int main(void)
 {
         glfwSetErrorCallback(error_callback);
         if (!glfwInit()) {
-                al::log(std::cerr, "[GLFW] Error: failed to initialized");
+                al::log(std::cerr, __FILE__, __LINE__, "[GLFW] Error: failed to initialized");
                 return INIT_ERR;
         }
 
@@ -166,19 +166,19 @@ int main(void)
 
         GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr);
         if (!window) {
-                al::log(std::cerr, "[GLFW] Error: couldn't create a window");
+                al::log(std::cerr, __FILE__, __LINE__, "[GLFW] Error: couldn't create a window");
                 glfwTerminate();
                 return WINDOW_ERR;
         }
 
         glfwMakeContextCurrent(window);
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-                al::log(std::cerr, "[GLAD] Error: couldn't initialize GLAD");
+                al::log(std::cerr, __FILE__, __LINE__, "[GLAD] Error: couldn't initialize GLAD");
                 glfwTerminate();
                 return GLAD_ERR;
         }
 
-        al::log(std::cout, "[LovelaceEngine] Version ", LOVELACE_VERSION_MAJOR, '.', LOVELACE_VERSION_MINOR);
+        al::log(std::cout, __FILE__, __LINE__, "[LovelaceEngine] Version ", LOVELACE_VERSION_MAJOR, '.', LOVELACE_VERSION_MINOR);
 
 #ifdef DEBUG
         int dflags;
@@ -188,12 +188,12 @@ int main(void)
                 glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
                 glDebugMessageCallback(al::gl::debugOutput, nullptr);
                 glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
-                al::log(std::cout, "[OpenGL] Running in debug mode");
+                al::log(std::cout, __FILE__, __LINE__, "[OpenGL] Running in debug mode");
         }
 #endif
 
-        al::log(std::cout, "[OpenGL] Renderer: ", glGetString(GL_RENDERER));
-        al::log(std::cout, "[OpenGL] Version: ", glGetString(GL_VERSION));
+        al::log(std::cout, __FILE__, __LINE__, "[OpenGL] Renderer: ", glGetString(GL_RENDERER));
+        al::log(std::cout, __FILE__, __LINE__, "[OpenGL] Version: ", glGetString(GL_VERSION));
 
         glfwSetWindowCloseCallback(window, window_close_callback);
         glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -292,13 +292,13 @@ int main(void)
                 }
         }
         catch (const std::exception& e) {
-                al::log(std::cerr, e.what());
+                al::log(std::cerr, __FILE__, __LINE__, e.what());
                 lovelace_clear();
                 glfwTerminate();
                 return EXCEPT_ERR;
         }
         catch (...) {
-                al::log(std::cerr, "unknown exception has occurred");
+                al::log(std::cerr, __FILE__, __LINE__, "unknown exception has occurred");
                 lovelace_clear();
                 glfwTerminate();
                 return EXCEPT_ERR;
