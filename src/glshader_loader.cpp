@@ -5,20 +5,14 @@
 
 #include <glad/glad.h>
 
-#include <unordered_map>
-#include <string>
-
-namespace al::gl::shader_loader
+namespace al::gl
 {
         ////////////////////////////////////////////////////////////////////////////////
-        static std::unordered_map<std::string, shader> shaders;
-
-        ////////////////////////////////////////////////////////////////////////////////
-        shader* load(int type, const std::string& url)
+        shader* shader_loader::load(int type, const std::string& url)
         {
                 auto id = url + std::to_string(type);
-                auto savedShader = shaders.find(id);
-                if (savedShader == shaders.end()) {
+                auto savedShader = mShaders.find(id);
+                if (savedShader == mShaders.end()) {
                         auto shaderSource = std::string("#version 400 core\n");
                         shaderSource += [](int shaderType) {
                                 switch (shaderType) {
@@ -31,7 +25,7 @@ namespace al::gl::shader_loader
                                 }
                         }(type);
                         shaderSource += read(url);
-                        auto result = shaders.emplace(id, std::move(shader(type, shaderSource)));
+                        auto result = mShaders.emplace(id, std::move(shader(type, shaderSource)));
                         log(std::cout, __FILE__, __LINE__, "[Lovelace] [al::gl::shader_loader] Loaded ", url);
                         return &result.first->second;
                 }
@@ -39,9 +33,9 @@ namespace al::gl::shader_loader
         }
 
         ////////////////////////////////////////////////////////////////////////////////
-        void clear()
+        shader_loader::~shader_loader()
         {
-                shaders.clear();
+                mShaders.clear();
                 log(std::cout, __FILE__, __LINE__, "[Lovelace] [al::gl::shader_loader] Cleared shaders");
         }
 }

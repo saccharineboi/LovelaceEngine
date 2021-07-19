@@ -3,12 +3,18 @@
 #include "glshader.h"
 
 #include <string>
+#include <unordered_map>
 
-namespace al::gl::shader_loader
+namespace al::gl
 {
-        ////////////////////////////////////////////////////////////////////////////////
-        shader* load(int type, const std::string& url);
+        class shader_loader
+        {
+        private:
+                std::unordered_map<std::string, shader> mShaders;
 
-        ////////////////////////////////////////////////////////////////////////////////
-        void clear();
+        public:
+                ~shader_loader();
+
+                shader* load(int type, const std::string& url);
+        };
 }
