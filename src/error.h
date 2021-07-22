@@ -18,7 +18,7 @@ namespace al
                 etype       mType;
 
         public:
-                exception(std::string namespaceName, std::string className, std::string functionName, std::string message, etype type)
+                exception(const std::string& namespaceName, const std::string& className, const std::string& functionName, const std::string& message, etype type)
                         : mNamespace(namespaceName), mClass{className}, mFunction{functionName}, mMessage{message}, mType{type} {}
 
                 std::string getNamespace() const                { return mNamespace; }
