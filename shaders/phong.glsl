@@ -3,14 +3,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNorm;
+layout (location = 2) in vec2 aTexCoord;
 
 ////////////////////////////////////////////////////////////////////////////////
 uniform mat4 uPVM;
 uniform mat4 uModel;
 uniform mat4 uNormal;
+uniform vec2 uTexMultiplier;
 
 ////////////////////////////////////////////////////////////////////////////////
 out vec3 vNorm;
+out vec2 vTexCoord;
 out vec3 vFragPos;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -19,12 +22,30 @@ void main()
         gl_Position = uPVM * vec4(aPos, 1.0f);
         vNorm = vec3(uNormal * vec4(aNorm, 0.0f));
         vFragPos = vec3(uModel * vec4(aPos, 1.0f));
+        vTexCoord = uTexMultiplier * aTexCoord;
 }
 
 #elif defined(FRAGMENT_SHADER)
 
 ////////////////////////////////////////////////////////////////////////////////
 struct material_t
+{
+        vec3 ambientColor;
+        vec3 diffuseColor;
+        vec3 specularColor;
+        float shininess;
+
+        bool enableAmbientTexture;
+        sampler2D ambientTexture;
+
+        bool enableDiffuseTexture;
+        sampler2D diffuseTexture;
+
+        bool enableSpecularTexture;
+        sampler2D specularTexture;
+};
+
+struct material_cached_t
 {
         vec3 ambient;
         vec3 diffuse;
@@ -82,6 +103,7 @@ struct spotLight_t
 ////////////////////////////////////////////////////////////////////////////////
 in vec3 vNorm;
 in vec3 vFragPos;
+in vec2 vTexCoord;
 
 ////////////////////////////////////////////////////////////////////////////////
 uniform dirLight_t      uDirLights      [NUM_DIR_LIGHTS];
@@ -92,7 +114,7 @@ uniform material_t uMaterial;
 uniform vec3 uViewPos;
 
 ////////////////////////////////////////////////////////////////////////////////
-vec3 computeDirLight(material_t material, dirLight_t light, vec3 normal, vec3 viewDir)
+vec3 computeDirLight(material_cached_t material, dirLight_t light, vec3 normal, vec3 viewDir)
 {
         // ambient light
         vec3 ambient = light.ambient * material.diffuse;
@@ -111,7 +133,7 @@ vec3 computeDirLight(material_t material, dirLight_t light, vec3 normal, vec3 vi
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-vec3 computePointLight(material_t material, pointLight_t light, vec3 normal, vec3 viewDir)
+vec3 computePointLight(material_cached_t material, pointLight_t light, vec3 normal, vec3 viewDir)
 {
         // attenuation
         float distance = length(light.position - vFragPos);
@@ -132,7 +154,7 @@ vec3 computePointLight(material_t material, pointLight_t light, vec3 normal, vec
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-vec3 computeSpotLight(material_t material, spotLight_t light, vec3 normal, vec3 viewDir)
+vec3 computeSpotLight(material_cached_t material, spotLight_t light, vec3 normal, vec3 viewDir)
 {
         // cutoff
         vec3 direction = normalize(vFragPos - light.position);
@@ -158,24 +180,44 @@ vec3 computeSpotLight(material_t material, spotLight_t light, vec3 normal, vec3 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+material_cached_t cacheMaterial(material_t material)
+{
+        material_cached_t cachedMaterial;
+
+        cachedMaterial.ambient = (material.enableAmbientTexture
+                               ? texture(material.ambientTexture, vTexCoord).rgb
+                               * material.ambientColor
+                               : material.ambientColor);
+
+        cachedMaterial.diffuse = (material.enableDiffuseTexture
+                               ? texture(material.diffuseTexture, vTexCoord).rgb
+                               * material.diffuseColor
+                               : material.diffuseColor);
+
+        cachedMaterial.specular = (material.enableSpecularTexture
+                                ? texture(material.specularTexture, vTexCoord).rgb
+                                * material.specularColor
+                                : material.specularColor);
+
+        cachedMaterial.shininess = material.shininess;
+        return cachedMaterial;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 out vec4 color;
 void main()
 {
         vec3 normal = normalize(vNorm);
         vec3 viewDir = normalize(uViewPos - vFragPos);
         vec3 resultColor = vec3(0.0f);
+        material_cached_t cached_material = cacheMaterial(uMaterial);
  
-        // directional lights
         for (int i = 0; i < NUM_DIR_LIGHTS; ++i)
-                resultColor += computeDirLight(uMaterial, uDirLights[i], normal, viewDir);
-
-        // point lights
+                resultColor += computeDirLight(cached_material, uDirLights[i], normal, viewDir);
         for (int i = 0; i < NUM_POINT_LIGHTS; ++i)
-                resultColor += computePointLight(uMaterial, uPointLights[i], normal, viewDir);
-
-        // spot lights
+                resultColor += computePointLight(cached_material, uPointLights[i], normal, viewDir);
         for (int i = 0; i < NUM_SPOT_LIGHTS; ++i)
-                resultColor += computeSpotLight(uMaterial, uSpotLights[i], normal, viewDir);
+                resultColor += computeSpotLight(cached_material, uSpotLights[i], normal, viewDir);
 
         color = vec4(resultColor, 1.0f);
 }
