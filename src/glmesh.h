@@ -17,8 +17,21 @@ namespace al::gl
 
                 void bindTextures() const
                 {
-                        for (int i = 0; i < static_cast<int>(mTextures.size()); ++i)
-                                mTextures[i]->bind(i);
+                        int count = static_cast<int>(mTextures.size());
+                        if (count == 1) {
+                                mTextures[0]->bind(0);
+                                mTextures[0]->bind(1);
+                                mTextures[0]->bind(2);
+                        }
+                        else if (count == 2) {
+                                mTextures[0]->bind(0);
+                                mTextures[0]->bind(1);
+                                mTextures[1]->bind(2);
+                        }
+                        else {
+                                for (int i = 0; i < count; ++i)
+                                        mTextures[i]->bind(i);
+                        }
                 }
 
                 void unbindTextures() const
