@@ -83,20 +83,23 @@ namespace al
         ////////////////////////////////////////////////////////////////////////////////
         void fpscamera::orient(float xpos, float ypos)
         {
-                static float lastX = xpos;
-                static float lastY = ypos;
+                if (mFirstTime) {
+                        mFirstTime = false;
+                        mLastX = xpos;
+                        mLastY = ypos;
+                }
 
                 if (!mActive) {
-                        lastX = xpos;
-                        lastY = ypos;
+                        mLastX = xpos;
+                        mLastY = ypos;
                         return;
                 }
 
-                float xoffset = xpos - lastX;
-                float yoffset = lastY - ypos;
+                float xoffset = xpos - mLastX;
+                float yoffset = mLastY - ypos;
 
-                lastX = xpos;
-                lastY = ypos;
+                mLastX = xpos;
+                mLastY = ypos;
 
                 xoffset *= mSensitivity;
                 yoffset *= mSensitivity;
@@ -131,21 +134,20 @@ namespace al
 
                 float newSpeed = mState.moveFaster ? mSpeedMultiplier * mSpeed : mSpeed;
 
-                static glm::vec3 newPos = mPosition;
                 if (mState.moveForward)
-                        newPos += mDirection * newSpeed * deltaTime;
+                        mNewPos += mDirection * newSpeed * deltaTime;
                 else if (mState.moveBackward)
-                        newPos -= mDirection * newSpeed * deltaTime;
+                        mNewPos -= mDirection * newSpeed * deltaTime;
                 if (mState.moveLeft)
-                        newPos -= glm::normalize(glm::cross(mDirection, mUp)) * newSpeed * deltaTime;
+                        mNewPos -= glm::normalize(glm::cross(mDirection, mUp)) * newSpeed * deltaTime;
                 else if (mState.moveRight)
-                        newPos += glm::normalize(glm::cross(mDirection, mUp)) * newSpeed * deltaTime;
+                        mNewPos += glm::normalize(glm::cross(mDirection, mUp)) * newSpeed * deltaTime;
                 if (mState.moveUp)
-                        newPos += mUp * newSpeed * deltaTime;
+                        mNewPos += mUp * newSpeed * deltaTime;
                 else if (mState.moveDown)
-                        newPos -= mUp * newSpeed * deltaTime;
+                        mNewPos -= mUp * newSpeed * deltaTime;
 
-                LERP(mPosition, mPosition, newPos, mSmoothness);
+                LERP(mPosition, mPosition, mNewPos, mSmoothness);
 
                 mProjection = glm::perspective(glm::radians(mFov), mScreenWidth / mScreenHeight, mNear, mFar);
                 mView = glm::lookAt(mPosition, mPosition + mDirection, mUp);

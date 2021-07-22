@@ -59,6 +59,10 @@ namespace al
 
                 bool mActive                    = false;
 
+                glm::vec3 mNewPos               = mPosition;
+                float mLastX, mLastY;
+                bool mFirstTime                 = true;
+
                 fpscamera(float screenWidth, float screenHeight, const fpscamera_input& input);
 
                 void orient(float xpos, float ypos);
