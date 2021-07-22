@@ -1,6 +1,8 @@
 #pragma once
 
 #include "glshader.h"
+#include "lights.h"
+#include "glmaterial.h"
 
 #include <glad/glad.h>
 #include <glm/mat2x2.hpp>
@@ -29,7 +31,7 @@ namespace al::gl
                 void check();
                 int findUniform(const std::string& name);
         public:
-                program(std::initializer_list<shader*> shaders);
+                explicit program(std::initializer_list<shader*> shaders);
 
                 ~program()                      { glDeleteProgram(mId); }
 
@@ -61,6 +63,13 @@ namespace al::gl
                 void uniform(const std::string& name, const glm::mat2& m)                       { glUniformMatrix2fv(findUniform(name), 1, GL_FALSE, glm::value_ptr(m)); }
                 void uniform(const std::string& name, const glm::mat3& m)                       { glUniformMatrix3fv(findUniform(name), 1, GL_FALSE, glm::value_ptr(m)); }
                 void uniform(const std::string& name, const glm::mat4& m)                       { glUniformMatrix4fv(findUniform(name), 1, GL_FALSE, glm::value_ptr(m)); }
+
+                void uniform(const std::string& name, const basic_material&);
+                void uniform(const std::string& name, const phong_material&);
+
+                void uniform(const std::string& name, const std::vector<dir_light>&);
+                void uniform(const std::string& name, const std::vector<point_light>&);
+                void uniform(const std::string& name, const std::vector<spot_light>&);
         };
 
         ////////////////////////////////////////////////////////////////////////////////
