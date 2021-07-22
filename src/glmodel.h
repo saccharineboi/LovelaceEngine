@@ -1,7 +1,6 @@
 #pragma once
 
 #include "glmesh.h"
-#include "glmaterial.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
