@@ -50,24 +50,26 @@ namespace al::gl
         ////////////////////////////////////////////////////////////////////////////////
         texture2D& texture2D::operator=(const texture2D& other)
         {
-                mWrapS          = other.mWrapS;
-                mWrapT          = other.mWrapT;
-                mMinF           = other.mMinF;
-                mMagF           = other.mMagF;
+                if (this != &other) {
+                        mWrapS          = other.mWrapS;
+                        mWrapT          = other.mWrapT;
+                        mMinF           = other.mMinF;
+                        mMagF           = other.mMagF;
 
-                mWidth          = other.mWidth;
-                mHeight         = other.mHeight;
-                mNumChannels    = other.mNumChannels;
-                mPath           = other.mPath;
+                        mWidth          = other.mWidth;
+                        mHeight         = other.mHeight;
+                        mNumChannels    = other.mNumChannels;
+                        mPath           = other.mPath;
 
-                delete[] mData;
-                size_t size     = mWidth * mHeight * mNumChannels;
-                mData = new unsigned char[size];
-                for (size_t i = 0; i < size; ++i)
-                        mData[i] = other.mData[i];
+                        delete[] mData;
+                        size_t size     = mWidth * mHeight * mNumChannels;
+                        mData = new unsigned char[size];
+                        for (size_t i = 0; i < size; ++i)
+                                mData[i] = other.mData[i];
 
-                glDeleteTextures(1, &mId);
-                load();
+                        glDeleteTextures(1, &mId);
+                        load();
+                }
                 return *this;
         }
 
@@ -84,24 +86,26 @@ namespace al::gl
         ////////////////////////////////////////////////////////////////////////////////
         texture2D& texture2D::operator=(texture2D&& other)
         {
-                glDeleteTextures(1, &mId);
-                delete[] mData;
+                if (this != &other) {
+                        glDeleteTextures(1, &mId);
+                        delete[] mData;
 
-                mId             = other.mId;
+                        mId             = other.mId;
 
-                mWrapS          = other.mWrapS;
-                mWrapT          = other.mWrapT;
-                mMinF           = other.mMinF;
-                mMagF           = other.mMagF;
+                        mWrapS          = other.mWrapS;
+                        mWrapT          = other.mWrapT;
+                        mMinF           = other.mMinF;
+                        mMagF           = other.mMagF;
 
-                mData           = other.mData;
-                mWidth          = other.mWidth;
-                mHeight         = other.mHeight;
-                mNumChannels    = other.mNumChannels;
-                mPath           = other.mPath;
+                        mData           = other.mData;
+                        mWidth          = other.mWidth;
+                        mHeight         = other.mHeight;
+                        mNumChannels    = other.mNumChannels;
+                        mPath           = other.mPath;
 
-                other.mId       = other.mWidth = other.mHeight = other.mNumChannels = 0;
-                other.mData     = nullptr;
+                        other.mId       = other.mWidth = other.mHeight = other.mNumChannels = 0;
+                        other.mData     = nullptr;
+                }
                 return *this;
         }
 
