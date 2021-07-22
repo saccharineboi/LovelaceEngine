@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 
 #include <iostream>
+#include <cstdlib>
 
 #ifdef DEBUG
 
@@ -50,7 +51,7 @@ namespace al::gl
                 case GL_DEBUG_SEVERITY_NOTIFICATION:    std::cerr << "Severity: notification"; break;
                 }
                 std::cerr << '\n';
-                throw;
+                exit(EXIT_FAILURE);
         }
 }
 
