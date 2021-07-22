@@ -13,7 +13,7 @@ namespace al
         inline void log(std::ostream& os, const char* file, int line, T&&... values)
         {
 #ifdef DEBUG
-                os << '[' << file << ":" << line << "] [" << __TIME__ << "] ";
+                os << '[' << file << ":" << line << "] ";
                 (os << ... << values) << '\n';
 #endif
         }
