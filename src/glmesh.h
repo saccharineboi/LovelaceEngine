@@ -3,6 +3,7 @@
 #include "glbuffer.h"
 #include "glvao.h"
 #include "gltexture2D.h"
+#include "error.h"
 
 #include <vector>
 #include <string>
@@ -18,19 +19,26 @@ namespace al::gl
                 void bindTextures() const
                 {
                         int count = static_cast<int>(mTextures.size());
-                        if (count == 1) {
-                                mTextures[0]->bind(0);
-                                mTextures[0]->bind(1);
-                                mTextures[0]->bind(2);
-                        }
-                        else if (count == 2) {
-                                mTextures[0]->bind(0);
-                                mTextures[0]->bind(1);
-                                mTextures[1]->bind(2);
-                        }
-                        else {
-                                for (int i = 0; i < count; ++i)
-                                        mTextures[i]->bind(i);
+                        switch (count) {
+                                case 0:
+                                        break;
+                                case 1:
+                                        mTextures[0]->bind(0);
+                                        mTextures[0]->bind(1);
+                                        mTextures[0]->bind(2);
+                                        break;
+                                case 2:
+                                        mTextures[0]->bind(0);
+                                        mTextures[0]->bind(1);
+                                        mTextures[1]->bind(2);
+                                        break;
+                                case 3:
+                                        mTextures[0]->bind(0);
+                                        mTextures[1]->bind(1);
+                                        mTextures[2]->bind(2);
+                                        break;
+                                default:
+                                        throw exception("al::gl", "mesh", "bindTextures", "unexpected number of given textures for a mesh", etype::unexpected);
                         }
                 }
 
