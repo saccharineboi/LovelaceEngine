@@ -1,14 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////////
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-////////////////////////////////////////////////////////////////////////////////
-#include <iostream>
-#include <vector>
-#include <cmath>
-#include <string>
-
-////////////////////////////////////////////////////////////////////////////////
 #include "config.h"
 #include "error.h"
 #include "io.h"
@@ -19,6 +9,12 @@
 #include "gltexture_loader.h"
 #include "glshader_loader.h"
 #include "glmodel.h"
+#include "glprogram.h"
+
+////////////////////////////////////////////////////////////////////////////////
+#ifdef DEBUG
+#include "gldebug.h"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 #include <glm/glm.hpp>
@@ -26,9 +22,14 @@
 #include <glm/gtc/type_ptr.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////
-#ifdef DEBUG
-#include "gldebug.h"
-#endif
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+////////////////////////////////////////////////////////////////////////////////
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <string>
 
 ////////////////////////////////////////////////////////////////////////////////
 #ifdef DEBUG
@@ -140,13 +141,6 @@ void drop_callback(GLFWwindow* window, int count, const char** paths)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void lovelace_clear()
-{
-        al::gl::texture_loader::clear();
-        al::gl::shader_loader::clear();
-}
-
-////////////////////////////////////////////////////////////////////////////////
 int main(void)
 {
         glfwSetErrorCallback(error_callback);
@@ -218,13 +212,14 @@ int main(void)
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
         try {
-                using namespace std::string_literals;
-
                 camera.mSpeed = 25.0f;
+
+                al::gl::shader_loader shaderLoader;
+                al::gl::program program{shaderLoader.load(GL_VERTEX_SHADER, LOVELACE_ROOT_DIR "shaders/phong.glsl"),
+                                        shaderLoader.load(GL_FRAGMENT_SHADER, LOVELACE_ROOT_DIR "shaders/phong.glsl")};
 
                 // meshes
                 al::gl::model sponza(LOVELACE_ROOT_DIR "models/sponza/Sponza.gltf");
-                auto cube = al::gl::genCube();
 
                 // directional light
                 al::dir_light sun = {
@@ -234,14 +229,14 @@ int main(void)
                         glm::vec3(glm::cos(glm::radians(-60.0f)), glm::sin(glm::radians(-60.0f)), 0.0f),      // direction
                         0.5f                                    // intensity
                 };
+                std::vector<al::dir_light> dirLights;
+                dirLights.push_back(sun);
 
                 // material for sponza
-                al::gl::phong_textured_material sponzaMat;
-                sponzaMat.mDirLights.push_back(&sun);
-
-                // material for cube
-                al::gl::phong_material cubeMat;
-                cubeMat.mDirLights.push_back(&sun);
+                al::gl::phong_material sponzaMat;
+                sponzaMat.mEnableAmbientTexture = true;
+                sponzaMat.mEnableDiffuseTexture = true;
+                sponzaMat.mEnableSpecularTexture = true;
 
                 // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 while (!glfwWindowShouldClose(window)) {
@@ -270,22 +265,19 @@ int main(void)
                         glm::mat4 sponzaNormal = glm::transpose(glm::inverse(sponzaModel));
                         glm::mat4 sponzaPVM = projection * view * sponzaModel;
 
+                        program.use();
+                        program.uniform("uModel", sponzaModel);
+                        program.uniform("uNormal", sponzaNormal);
+                        program.uniform("uPVM", sponzaPVM);
+                        program.uniform("uViewPos", camera.mPosition);
+                        program.uniform("uTexMultiplier", glm::vec2(1.0f, 1.0f));
+
+                        program.uniform("uMaterial", sponzaMat);
+                        program.uniform("uDirLights", dirLights);
+
                         // draw sponza
-                        sponzaMat.use();
-                        sponzaMat.update(camera.mPosition, sponzaNormal, sponzaModel, sponzaPVM);
                         sponza.draw();
-                        sponzaMat.halt();
-
-                        glm::vec4 cubeColor = glm::vec4(1.0f, 0.5f, 0.25f, 1.0f);
-                        glm::mat4 cubeModel = glm::translate(glm::mat4(1.0f), glm::vec3(5.0f, 5.0f, 0.0f));
-                        glm::mat4 cubeNormal = glm::transpose(glm::inverse(cubeModel));
-                        glm::mat4 cubePVM = projection * view * cubeModel;
-
-                        // draw cube
-                        cubeMat.use();
-                        cubeMat.update(camera.mPosition, cubeNormal, cubeModel, cubePVM);
-                        cube.draw();
-                        cubeMat.halt();
+                        program.halt();
 
                         glfwSwapBuffers(window);
                         glfwPollEvents();
@@ -293,18 +285,18 @@ int main(void)
         }
         catch (const std::exception& e) {
                 al::log(std::cerr, __FILE__, __LINE__, e.what());
-                lovelace_clear();
+                al::gl::texture_loader::clear();
                 glfwTerminate();
                 return EXCEPT_ERR;
         }
         catch (...) {
                 al::log(std::cerr, __FILE__, __LINE__, "unknown exception has occurred");
-                lovelace_clear();
+                al::gl::texture_loader::clear();
                 glfwTerminate();
                 return EXCEPT_ERR;
         }
 
-        lovelace_clear();
+        al::gl::texture_loader::clear();
         glfwTerminate();
         return SUCCESS;
 }
