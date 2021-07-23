@@ -214,12 +214,13 @@ int main(void)
         try {
                 camera.mSpeed = 25.0f;
 
+                al::gl::texture_loader textureLoader;
                 al::gl::shader_loader shaderLoader;
                 al::gl::program program{shaderLoader.load(GL_VERTEX_SHADER, LOVELACE_ROOT_DIR "shaders/phong.glsl"),
                                         shaderLoader.load(GL_FRAGMENT_SHADER, LOVELACE_ROOT_DIR "shaders/phong.glsl")};
 
                 // meshes
-                al::gl::model sponza(LOVELACE_ROOT_DIR "models/sponza/Sponza.gltf");
+                al::gl::model sponza(LOVELACE_ROOT_DIR "models/sponza/Sponza.gltf", textureLoader);
 
                 // directional light
                 al::dir_light sun = {
@@ -285,18 +286,15 @@ int main(void)
         }
         catch (const std::exception& e) {
                 al::log(std::cerr, __FILE__, __LINE__, e.what());
-                al::gl::texture_loader::clear();
                 glfwTerminate();
                 return EXCEPT_ERR;
         }
         catch (...) {
                 al::log(std::cerr, __FILE__, __LINE__, "unknown exception has occurred");
-                al::gl::texture_loader::clear();
                 glfwTerminate();
                 return EXCEPT_ERR;
         }
 
-        al::gl::texture_loader::clear();
         glfwTerminate();
         return SUCCESS;
 }
