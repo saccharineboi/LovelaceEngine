@@ -3,15 +3,19 @@
 #include "gltexture2D.h"
 
 #include <string>
+#include <unordered_map>
 
-namespace al::gl::texture_loader
+namespace al::gl
 {
         ////////////////////////////////////////////////////////////////////////////////
-        texture2D* load2D(const std::string& url);
+        class texture_loader
+        {
+        private:
+                std::unordered_map<std::string, texture2D> mTextures;
 
-        ////////////////////////////////////////////////////////////////////////////////
-        size_t getTotalBytesLoaded();
+        public:
+                ~texture_loader() { mTextures.clear(); }
 
-        ////////////////////////////////////////////////////////////////////////////////
-        void clear();
+                texture2D* load2D(const std::string& url);
+        };
 }
