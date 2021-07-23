@@ -31,11 +31,4 @@ namespace al::gl
                 }
                 return &savedShader->second;
         }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        shader_loader::~shader_loader()
-        {
-                mShaders.clear();
-                log(std::cout, __FILE__, __LINE__, "[Lovelace] [al::gl::shader_loader] Cleared shaders");
-        }
 }
