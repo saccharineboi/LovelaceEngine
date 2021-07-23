@@ -1,11 +1,10 @@
 #include "glmodel.h"
 #include "error.h"
-#include "gltexture_loader.h"
 
 namespace al::gl
 {
         ////////////////////////////////////////////////////////////////////////////////
-        model::model(const std::string& path)
+        model::model(const std::string& path, texture_loader& textureLoader)
                 : mPath{path}
         {
                 Assimp::Importer importer;
@@ -13,19 +12,19 @@ namespace al::gl
                 if (!ai_scene || ai_scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !ai_scene->mRootNode)
                         throw exception("al::gl", "model", "model", importer.GetErrorString(), etype::unexpected);
 
-                processNode(ai_scene->mRootNode, ai_scene);
+                processNode(ai_scene->mRootNode, ai_scene, textureLoader);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
-        void model::processNode(aiNode* ai_node, const aiScene* ai_scene)
+        void model::processNode(aiNode* ai_node, const aiScene* ai_scene, texture_loader& textureLoader)
         {
                 for (size_t i = 0; i < ai_node->mNumMeshes; ++i) {
                         aiMesh* ai_mesh = ai_scene->mMeshes[ai_node->mMeshes[i]];
-                        mMeshes.push_back(processMesh(ai_mesh, ai_scene));
+                        mMeshes.push_back(processMesh(ai_mesh, ai_scene, textureLoader));
                 }
 
                 for (size_t i = 0; i < ai_node->mNumChildren; ++i)
-                        processNode(ai_node->mChildren[i], ai_scene);
+                        processNode(ai_node->mChildren[i], ai_scene, textureLoader);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +40,7 @@ namespace al::gl
         }
 
         ////////////////////////////////////////////////////////////////////////////////
-        mesh model::processMesh(aiMesh* ai_mesh, const aiScene* ai_scene)
+        mesh model::processMesh(aiMesh* ai_mesh, const aiScene* ai_scene, texture_loader& textureLoader)
         {
                 // process vertices
                 std::vector<float> vertices;
@@ -81,13 +80,13 @@ namespace al::gl
                                 aiString str;
                                 ai_material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
                                 std::string texturePath = genTexturePath(mPath, str.C_Str());
-                                textures.push_back(texture_loader::load2D(texturePath));
+                                textures.push_back(textureLoader.load2D(texturePath));
                         }
                         if (ai_material->GetTextureCount(aiTextureType_SPECULAR) > 0) {
                                 aiString str;
                                 ai_material->GetTexture(aiTextureType_SPECULAR, 0, &str);
                                 std::string texturePath = genTexturePath(mPath, str.C_Str());
-                                textures.push_back(texture_loader::load2D(texturePath));
+                                textures.push_back(textureLoader.load2D(texturePath));
                         }
                 }
 

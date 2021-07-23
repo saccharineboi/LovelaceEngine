@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glmesh.h"
+#include "gltexture_loader.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -17,10 +18,10 @@ namespace al::gl
                 std::string mPath;
                 std::vector<mesh> mMeshes;
 
-                void processNode(aiNode* ai_node, const aiScene* ai_scene);
-                mesh processMesh(aiMesh* ai_mesh, const aiScene* ai_scene);
+                void processNode(aiNode* ai_node, const aiScene* ai_scene, texture_loader& loader);
+                mesh processMesh(aiMesh* ai_mesh, const aiScene* ai_scene, texture_loader& loader);
         public:
-                explicit model(const std::string& path);
+                model(const std::string& path, texture_loader& loader);
 
                 void draw(int mode = GL_TRIANGLES) const;
 
